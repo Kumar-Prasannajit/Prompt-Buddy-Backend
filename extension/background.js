@@ -105,21 +105,74 @@ async function handleEnhancePromptRequest(prompt, settings) {
 
     try {
         // Route to the appropriate model provider
+        let result;
         switch (model.toLowerCase()) {
             case 'openai':
             case 'chatgpt':
-                return await enhanceWithOpenAI(prompt, apiKey, tone, maxWords, systemInstruction);
+                result = await enhanceWithOpenAI(prompt, apiKey, tone, maxWords, systemInstruction);
+                break;
             case 'gemini':
-                return await enhanceWithGemini(prompt, apiKey, tone, maxWords, systemInstruction, geminiModel);
+                result = await enhanceWithGemini(prompt, apiKey, tone, maxWords, systemInstruction, geminiModel);
+                break;
             case 'claude':
-                return await enhanceWithClaude(prompt, apiKey, tone, maxWords, systemInstruction);
+                result = await enhanceWithClaude(prompt, apiKey, tone, maxWords, systemInstruction);
+                break;
             default:
                 throw new Error('Invalid or unsupported model selected');
         }
+
+        // AUTO-SAVE: If successful, attempt to save to backend database
+        if (result.success && result.enhancedPrompt) {
+            savePromptToBackend(prompt, result.enhancedPrompt, finalMode);
+        }
+
+        return result;
     } catch (error) {
         console.error('[PromptBuddy] Background Error:', error);
         return { success: false, error: error.message || 'Failed to communicate with AI provider' };
     }
+}
+
+/**
+ * Saves the enhanced prompt to the backend database if the user is logged in
+ */
+async function savePromptToBackend(rawPrompt, enhancedPrompt, mode) {
+    chrome.storage.local.get(['accessToken'], async (result) => {
+        const token = result.accessToken;
+        if (!token) {
+            console.log('[PromptBuddy] User not logged in, skipping save to DB');
+            return;
+        }
+
+        try {
+            // Generate a simple title from the first few words of the raw prompt
+            const title = rawPrompt.split(' ').slice(0, 5).join(' ').substring(0, 50) || 'Untitled Prompt';
+            const category = mode || 'general';
+
+            const response = await fetch('http://localhost:3000/api/v1/prompts/create-prompt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    title,
+                    rawPrompt,
+                    enhancedPrompt,
+                    category
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                console.log('[PromptBuddy] Prompt saved to database successfully');
+            } else {
+                console.warn('[PromptBuddy] Failed to save prompt:', data.message);
+            }
+        } catch (err) {
+            console.error('[PromptBuddy] Error calling save-prompt API:', err);
+        }
+    });
 }
 
 // ==========================================

@@ -102,30 +102,101 @@
       <!-- ================= RIGHT COLUMN ================= -->
       <div class="right-column">
 
-      <!-- Login/Signup Section -->
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username" required />
-      </div>
+      <!-- Dynamic Auth Section -->
+      <div id="authSection" class="login-signup-section">
+        
+        <!-- Logged Out View (Signup/Login) -->
+        <div id="loggedOutView" class="auth-view">
+          <h3 id="authTitle">Create an Account</h3>
+          <p id="authDesc">Sync your prompts and access them anywhere.</p>
+          
+          <!-- avatar -->
+          <div class="form-group no-bg">
+            <label for="avatar">Avatar</label>
+            <input type="file" id="avatar" accept="image/*" />
+          </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" required />
-      </div>
+          <!-- username -->
+          <div class="form-group no-bg" id="usernameGroup">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" />
+          </div>
+          
+          <!-- full name -->
+          <div class="form-group no-bg" id="fullNameGroup">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" placeholder="Enter your full name" />
+          </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password" required />
-      </div>
+          <!-- email -->
+          <div class="form-group no-bg">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" />
+          </div>
+          
+          <!-- password -->
+          <div class="form-group no-bg">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" />
+          </div>
+          
+          <!-- confirm password -->
+          <div class="form-group no-bg" id="confirmPasswordGroup">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm your password" />
+          </div>
+          
+          <!-- sign up button -->
+          <div class="form-group no-bg">
+            <button type="button" id="signupBtn" class="btn btn-primary full-width">Sign Up</button>
+            
+            <!-- switch between login and signup -->
+            <p class="switch-auth">
+              <span id="authSwitchText">Already have an account?</span> 
+              <!-- log in link -->
+              <a href="#" id="authSwitchAction">Log In</a>
+            </p>
+          </div>
+        </div>
 
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required />
-      </div>
+        <!-- Logged In View (Profile) -->
+        <div id="loggedInView" class="auth-view" style="display: none;">
 
-      <div class="form-group">
-        <button type="button" id="loginBtn" class="btn btn-primary">Login</button>
-        <button type="button" id="signupBtn" class="btn btn-secondary">Signup</button>
+          <!-- profile header with avatar, username & email-->
+          <div class="profile-header">
+            <div class="avatar-circle">
+              <img id="userAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Buddy" alt="Avatar" />
+            </div>
+            <div class="user-info">
+              <h3 id="profileName">Loading...</h3>
+              <p id="profileEmail">Loading...</p>
+            </div>
+          </div>
+          
+          <hr class="auth-divider" />
+          
+          <h4>Security Settings</h4>
+          
+          <!-- current password -->
+          <div class="form-group no-bg">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" id="currentPassword" placeholder="Enter current password" />
+          </div>
+          
+          <!-- new password -->
+          <div class="form-group no-bg">
+            <label for="newPassword">New Password</label>
+            <input type="password" id="newPassword" placeholder="Enter new password" />
+          </div>
+          
+          <!-- change password button -->
+          <div class="form-group no-bg">
+            <button type="button" id="changePasswordBtn" class="btn btn-secondary full-width">Update Password</button>
+            
+            <!-- logout button -->
+            <button type="button" id="logoutBtn" class="btn btn-outline-danger full-width">Logout</button>
+          </div>
+        </div>
       </div>
 
         <!-- 3-column compact row -->

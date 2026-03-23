@@ -153,16 +153,97 @@ textarea:focus {
     border-radius: 14px;
     padding: 18px;
     border: 1px solid var(--border-color);
+    margin-bottom: 20px;
 }
 
 .login-signup-section h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.login-signup-section h4 {
     font-size: 15px;
-    margin-bottom: 6px;
+    margin: 16px 0 10px;
+    color: var(--text-primary);
 }
 
 .login-signup-section p {
     font-size: 13px;
     color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #10a37f;
+    background: var(--bg-tertiary);
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.auth-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 18px 0;
+}
+
+/* Utility Classes */
+.full-width {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.no-bg {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-bottom: 12px;
+}
+
+.btn-outline-danger {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+.btn-outline-danger:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.switch-auth {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.switch-auth a {
+    color: #10a37f;
+    text-decoration: none;
+    font-weight: 500;
 }
 
 /* 3-column compact grid */

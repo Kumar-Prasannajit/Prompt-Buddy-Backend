@@ -24,7 +24,7 @@ const promptModel = new Schema(
         },
         category: {
             type: String,
-            enum: ['code', 'creative', 'general'],
+            enum: ['code', 'creative', 'general', 'development', 'image'],
             default: 'general'
         },
         isPublic: {

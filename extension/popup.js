@@ -54,12 +54,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const modelBtn = document.querySelector('.model-btn');
     const modelMenu = document.querySelector('.model-menu');
     const modelItems = document.querySelectorAll('.model-item');
+    const loginMsg = document.getElementById('loginMsg');
 
     // Basic null check for critical elements
     if (!chatMessages || !originalPromptTextarea || !enhanceBtn || !statusMessage || !settingsLink) {
         console.error('[PromptBuddy] Critical DOM elements missing, aborting init');
         return;
     }
+
+    /**
+     * Updates the UI based on login status
+     * @param {boolean} isLoggedIn 
+     */
+    function updateAuthUI(isLoggedIn) {
+        if (isLoggedIn) {
+            loginMsg.style.display = 'none';
+            // Only enable if API key is also configured
+            chrome.storage.sync.get(['apiKey', 'model'], (result) => {
+                const isConfigured = result.apiKey && result.model;
+                enhanceBtn.disabled = !isConfigured;
+                if (!isConfigured) {
+                    addSystemMessage('Please configure your API key and model in Settings.');
+                }
+            });
+            modeBtn.disabled = false;
+            modelBtn.disabled = false;
+            originalPromptTextarea.disabled = false;
+        } else {
+            loginMsg.style.display = 'block';
+            enhanceBtn.disabled = true;
+            modeBtn.disabled = true;
+            modelBtn.disabled = true;
+            originalPromptTextarea.disabled = true;
+        }
+    }
+
+    // Check if user is logged in
+    chrome.storage.local.get(['accessToken'], (result) => {
+        updateAuthUI(!!result.accessToken);
+    });
+
+    // Listen for storage changes (e.g. login/logout in options page)
+    chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local' && changes.accessToken) {
+            updateAuthUI(!!changes.accessToken.newValue);
+        }
+    });
 
     // ------------------------------------------
     // BOOTSTRAP: THEME & SETTINGS
@@ -80,11 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Check configuration status
+    // Initial configuration check
     chrome.storage.sync.get(['apiKey', 'model'], (result) => {
         if (!result.apiKey || !result.model) {
-            addSystemMessage('Please configure your API key and model in Settings to start enhancing prompts.');
-            enhanceBtn.disabled = true;
+            chrome.storage.local.get(['accessToken'], (auth) => {
+                if (auth.accessToken) {
+                    addSystemMessage('Please configure your API key and model in Settings to start enhancing prompts.');
+                    enhanceBtn.disabled = true;
+                }
+            });
         }
     });
 

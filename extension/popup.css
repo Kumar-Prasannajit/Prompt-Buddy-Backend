@@ -85,6 +85,16 @@ body.popup-page {
   overflow-y: auto;
 }
 
+.loginMsg {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
 /* ===============================
    MESSAGES (JS relies on these)
 =============================== */
@@ -201,6 +211,12 @@ body.popup-page {
   font-size: inherit;
   color: var(--text);
   line-height: 1.4;
+  overflow-y: hidden;
+  scrollbar-width: none; /* Firefox */
+}
+
+.chat-input::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 .chat-input::placeholder {

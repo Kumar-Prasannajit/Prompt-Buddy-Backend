@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
+import { ApiError } from "./utils/ApiError.js";
 
 const app = express();
 
@@ -35,5 +36,26 @@ import promptRoutes from "./routes/prompt.routes.js"
 app.use("/api/v1/healthcheck", healthCheckRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/prompts", promptRoutes);
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    if (err instanceof ApiError) {
+        return res.status(err.statusCode).json({
+            success: false,
+            message: err.message,
+            errors: err.errors,
+            data: null
+        });
+    }
+
+    // Default error
+    console.error("Unhandle Error:", err);
+    return res.status(500).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+        errors: [],
+        data: null
+    });
+});
 
 export default app;
