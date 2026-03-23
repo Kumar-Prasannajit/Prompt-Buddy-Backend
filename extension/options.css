@@ -147,6 +147,24 @@ textarea:focus {
     gap: 20px;
 }
 
+/* Login/Signup Section */
+.login-signup-section {
+    background: var(--bg-secondary);
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid var(--border-color);
+}
+
+.login-signup-section h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.login-signup-section p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
 /* 3-column compact grid */
 .compact-grid {
     display: grid;
